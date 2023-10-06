@@ -16,7 +16,9 @@ contract DAO {
     //  Todo
     // mapping(address => bool) []  // array index is proposal ID
     // or better use C++ std::set e.g. [proposal ID, hash_set of addresses)], we do not need bools
-    mapping(address => bool) public voted; // For this is for 0th proposal only
+    // proposal ID => (voter_addr => voted)
+    mapping(uint256 => mapping(address => bool)) public voters;
+    uint256[] public arr;
 
     // --------------------------------
 
@@ -33,12 +35,12 @@ contract DAO {
         numProposals++;
     }
 
-    function voteOnProposal(uint256 proposalIndex, Vote vote) public {
-        require(voted[msg.sender] == false, "ALREADY_VOTED");
+    function voteOnProposal(uint256 propId, Vote vote) public {
+        require(voters[propId][msg.sender] == false, "ALREADY_VOTED");
  
-        Proposal storage proposal = proposals[proposalIndex];
-        voted[msg.sender] = true;
-        console.log("%s voted: %d", msg.sender, voted[msg.sender]);
+        Proposal storage proposal = proposals[propId];
+        voters[propId][msg.sender] = true;
+        console.log("%s voted for prop. id %d", msg.sender, propId);
 
         if (vote == Vote.YES) {
             proposal.yesVotes += 1;
