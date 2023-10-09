@@ -4,7 +4,7 @@ pragma solidity 0.8.18;
 
 import "hardhat/console.sol";
 
-contract DAO {
+contract Dao {
 
     enum Vote { NO, YES }
 
@@ -24,20 +24,39 @@ contract DAO {
 
     // Create a struct named Proposal containing all relevant information
     struct Proposal {
-        uint256 yesVotes;
-        uint256 noVotes;
         string name;
+        uint256 yesVotes;
+        uint256 noVotes;                
+        uint256 deadline; // the UNIX timestamp until which this proposal is open to voting 
     }
 
-    function createProposal(string memory name) public {
+    function create_proposal(string memory name) public {
         Proposal storage proposal = proposals[numProposals];
         proposal.name = name;
+        proposal.deadline = block.timestamp + 90 days;
         numProposals++;
     }
 
-    function voteOnProposal(uint256 propId, Vote vote) public {
+    // hint: https://www.unixtimestamp.com/
+    function change_proposal_deadline(uint256 propId, uint256 unix_timestamp) public {
+        Proposal storage proposal = proposals[propId];
+        require(unix_timestamp > block.timestamp, "DEADLINE_IN_THE_PAST");
+        proposal.deadline = unix_timestamp;
+    }
+
+    function change_proposal_name(uint256 propId, string memory name) public {
+        // todo: reject empyt string
+        require(name != " ", "DEADLINE_IN_THE_PAST");
+        Proposal storage proposal = proposals[propId];
+        proposal.name = name;
+    }
+
+    function vote_on_proposal(uint256 propId, Vote vote) public {
         require(voters[propId][msg.sender] == false, "ALREADY_VOTED");
- 
+        require(
+            proposals[propId].deadline > block.timestamp,
+            "DEADLINE_EXCEEDED"
+        );
         Proposal storage proposal = proposals[propId];
         voters[propId][msg.sender] = true;
         console.log("%s voted for prop. id %d", msg.sender, propId);
@@ -48,4 +67,7 @@ contract DAO {
             proposal.noVotes += 1;
         }
     }
+
+    // --------------------------------
+
 }
