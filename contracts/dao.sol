@@ -3,6 +3,8 @@ pragma solidity 0.8.18;
 /// @title Simple DAO smart contract.
 
 import "truffle/console.sol";
+// or
+// import "hardhat/console.sol";
 
 contract Dao {
 
@@ -15,12 +17,13 @@ contract Dao {
     
     //  Todo
     // mapping(address => bool) []  // array index is proposal ID
-    // or better use C++ std::set e.g. [proposal ID, hash_set of addresses)], we do not need bools
+    // or better use C++ std::set e.g. [proposal ID, hash_set of addresses)], 
+    // we do not really need bools
     // proposal ID => (voter_addr => voted)
     mapping(uint256 => mapping(address => bool)) public voters;
     uint256[] public arr;
 
-    // --------------------------------
+    // -------------
 
     // Create a struct named Proposal containing all relevant information
     struct Proposal {
@@ -49,8 +52,7 @@ contract Dao {
     }
 
     function change_proposal_name(uint256 prop_id, string memory name) public {
-        // todo: reject empyt string
-        require(keccak256(bytes(name)) == keccak256(" "), "EMPTY_PROPOSAL_NAME");
+        require(bytes(name).length != 0, "EMPTY_PROPOSAL_NAME");
         Proposal storage proposal = proposals[prop_id];
         proposal.name = name;
     }
@@ -72,10 +74,14 @@ contract Dao {
         }
     }
 
-    // --------------------------------
+    // --------- Getters
 
-    // function get_proposal(uint256 index) public view returns(Proposal) {
-	// 	return proposals[index];
-	// }
+    function proposal_yes_votes(uint256 index) public view returns(uint256) {
+		return proposals[index].yes_votes;
+	}
+
+    function proposal_name(uint256 index) public view returns(string memory name) {
+		return proposals[index].name;
+	}
 
 }
