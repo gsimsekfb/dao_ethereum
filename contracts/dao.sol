@@ -2,7 +2,7 @@
 pragma solidity 0.8.18;
 /// @title Simple DAO smart contract.
 
-import "hardhat/console.sol";
+import "truffle/console.sol";
 
 contract Dao {
 
@@ -11,7 +11,7 @@ contract Dao {
     // Create a mapping of ID => Proposal
     mapping(uint256 => Proposal) public proposals;
     // Number of proposals that have been created
-    uint256 public numProposals;
+    uint256 public num_proposals;
     
     //  Todo
     // mapping(address => bool) []  // array index is proposal ID
@@ -25,49 +25,57 @@ contract Dao {
     // Create a struct named Proposal containing all relevant information
     struct Proposal {
         string name;
-        uint256 yesVotes;
-        uint256 noVotes;                
+        uint256 yes_votes;
+        uint256 no_votes;                
         uint256 deadline; // the UNIX timestamp until which this proposal is open to voting 
     }
 
+    // function get_name(uint256 index) public view returns(Proposal) {
+	// 	return proposals[index];
+	// }
+
     function create_proposal(string memory name) public {
-        Proposal storage proposal = proposals[numProposals];
+        Proposal storage proposal = proposals[num_proposals];
         proposal.name = name;
         proposal.deadline = block.timestamp + 90 days;
-        numProposals++;
+        num_proposals++;
     }
 
     // hint: https://www.unixtimestamp.com/
-    function change_proposal_deadline(uint256 propId, uint256 unix_timestamp) public {
-        Proposal storage proposal = proposals[propId];
+    function change_proposal_deadline(uint256 prop_id, uint256 unix_timestamp) public {
+        Proposal storage proposal = proposals[prop_id];
         require(unix_timestamp > block.timestamp, "DEADLINE_IN_THE_PAST");
         proposal.deadline = unix_timestamp;
     }
 
-    function change_proposal_name(uint256 propId, string memory name) public {
+    function change_proposal_name(uint256 prop_id, string memory name) public {
         // todo: reject empyt string
-        require(name != " ", "DEADLINE_IN_THE_PAST");
-        Proposal storage proposal = proposals[propId];
+        require(keccak256(bytes(name)) == keccak256(" "), "EMPTY_PROPOSAL_NAME");
+        Proposal storage proposal = proposals[prop_id];
         proposal.name = name;
     }
 
-    function vote_on_proposal(uint256 propId, Vote vote) public {
-        require(voters[propId][msg.sender] == false, "ALREADY_VOTED");
+    function vote_on_proposal(uint256 prop_id, Vote vote) public {
+        require(voters[prop_id][msg.sender] == false, "ALREADY_VOTED");
         require(
-            proposals[propId].deadline > block.timestamp,
+            proposals[prop_id].deadline > block.timestamp,
             "DEADLINE_EXCEEDED"
         );
-        Proposal storage proposal = proposals[propId];
-        voters[propId][msg.sender] = true;
-        console.log("%s voted for prop. id %d", msg.sender, propId);
+        Proposal storage proposal = proposals[prop_id];
+        voters[prop_id][msg.sender] = true;
+        console.log("%s voted for prop. id %d", msg.sender, prop_id);
 
         if (vote == Vote.YES) {
-            proposal.yesVotes += 1;
+            proposal.yes_votes += 1;
         } else {
-            proposal.noVotes += 1;
+            proposal.no_votes += 1;
         }
     }
 
     // --------------------------------
+
+    // function get_proposal(uint256 index) public view returns(Proposal) {
+	// 	return proposals[index];
+	// }
 
 }
