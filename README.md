@@ -7,9 +7,10 @@ This is a simple DAO (decentralized autonomous organization) smart contract proj
 ## Usage  
 
 ### Create new proposal 
-<img src="files/write.jpg" width="750">
+<img src="files/write.jpg" width="650">
 
 ### Read proposal 
+<img src="files/read_.jpg" width="650">
 
 
 ## Compile and Test    
