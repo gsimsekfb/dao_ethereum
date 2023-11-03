@@ -1,6 +1,9 @@
 
 # dao_ethereum
 
+## Info    
+This is a simple DAO (decentralized autonomous organization) smart contract project with Truffle suite and Ethereum.  
+
 ## Usage  
 
 Compile:  
