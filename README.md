@@ -6,6 +6,14 @@ This is a simple DAO (decentralized autonomous organization) smart contract proj
 
 ## Usage  
 
+### Create new proposal 
+<img src="files/write.jpg" width="750">
+
+### Read proposal 
+
+
+## Compile and Test    
+
 Compile:  
 ```
 truffle compile
