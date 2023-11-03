@@ -9,7 +9,7 @@ This is a simple DAO (decentralized autonomous organization) smart contract proj
 Currently, deployed on testnet Goerli and can be used by everyone:     
 https://goerli.etherscan.io/address/0xd56fb03d65efbcc9dbcf405d604e4c6228f0c649#writeContract   
 
-To use this contract (e.g. create and read proposals), simply install Metamask, create account and get free Eth from https://goerlifaucet.com/.  
+To use this contract (e.g. create, vote on proposals etc..), simply install Metamask, create account and get free Eth from https://goerlifaucet.com/.  
 
 ### Create new proposal 
 <img src="files/write.jpg" width="650">
